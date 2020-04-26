@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container mt-3">
+
+
+        <h1>Script bash to Dockerfile</h1>
+
+        <div class="form-group">
+            <label for="textareainput">input a script</label>
+            <textarea rows="6" class="form-control textareainput" rows="3"></textarea>
+        </div>
+
+        <p>Output filename</p>
+
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-primary buttonconvert" type="button">Convert</button>
+                <button class="btn btn-outline-danger buttoncancel" type="button">Cancel</button>
+            </div>
+            <input type="text" class="form-control fileoutput" value="script.sh" placeholder="script.sh">
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="textareaoutput">output generated script file into bash</label>
+            <textarea rows="6" class="form-control textareaoutput" rows="3"></textarea>
+        </div>
+
+    </div>
+
+
+    <script>
+
+
+
+        /*
+        
+                $('.one').on('keydown', function (event) {
+                    var key = String.fromCharCode(event.which);
+                    if (!event.shiftKey) {
+                        key = key.toLowerCase();
+                    }
+                    //$('.two').val( $('.two').val() + $(this).val() + key );
+                    $('.two').val($('.one').val())
+                });
+                
+                $('.ready').on('click', function (event) {
+                    var key = String.fromCharCode(event.which);
+                    if (!event.shiftKey) {
+                        key = key.toLowerCase();
+                    }
+                    //$('.two').val( $('.two').val() + $(this).val() + key );
+                    $('.two').val($('.one').val())
+                });
+        
+        */
+
+        $filename = "script.sh"
+        $('.fileoutput').on('change paste keyup', function (event) {
+            $filename = $('.fileoutput').val()
+            convert()
+        })
+
+
+        //$filename = "~/mineserver/server2.properties"
+        $('.textareainput').on('change paste keyup', function (event) {
+            convert()
+        })
+
+
+
+        $('.buttoncancel').on('click', function (event) {
+            $filename = "script.sh"
+            $('.fileoutput').val($filename)
+            convert()
+        })
+
+
+
+        function convert() {
+
+            //$('.convert').on('click', function (event) {
+            /*
+            var key = String.fromCharCode(event.which);
+            if (!event.shiftKey) {
+                key = key.toLowerCase();
+            }
+            */
+            //$('.two').val( $('.two').val() + $(this).val() + key );
+            //$('.two').val($('.one').val())
+
+            $output = ""
+
+            var lines = $('.textareainput').val().split('\n');   // lines is an array of strings
+            // Loop through all lines
+            if (lines.length == 0) {
+                $output = "empty"
+            }
+            if (lines.length == 1) {
+
+                //console.log('echo "' + lines[0]+'" > '+$filename)
+                $output = 'echo\t"' + lines[0] + '" > ' + $filename
+            }
+            if (lines.length == 2) {
+
+                //console.log('echo "' + lines[0]+' \\n" \\ ')
+                $output = 'echo\t"' + lines[0] + ' \\n" \\ \n'
+                //console.log('     "' + lines[1]+'" > '+$filename) //" > ~/mineserver/server2.properties
+                $output += '\t\t"' + lines[1] + '" > ' + $filename
+            }
+            if (lines.length > 2) {
+
+                //console.log('echo "' + lines[0]+' \\n" \\ ')
+                $output = 'echo\t"' + lines[0] + ' \\n" \\ \n'
+
+                for (var j = 1; j < lines.length - 1; j++) {
+                    //console.log('Line ' + j + ' is ' + lines[j])
+
+                    //console.log('     "' + lines[j]+' \\n" \\ ')
+                    $output += '\t\t"' + lines[j] + ' \\n" \\ \n'
+                }
+                //console.log('Last Line is ' + lines[lines.length-1])
+
+                //console.log('     "' + lines[lines.length-1]+'" > '+$filename) //" > ~/mineserver/server2.properties
+                $output += '\t\t"' + lines[lines.length - 1] + '" > ' + $filename
+            }
+            $('.textareaoutput').val($output)
+
+        }
+        //https://mathiasbynens.be/notes/javascript-escapes
+    </script>
+</body>
+
+</html>
